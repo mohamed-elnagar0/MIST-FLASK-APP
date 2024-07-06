@@ -104,9 +104,18 @@ def index():
         if len(existing_images) >= 10:
             # Remove the oldest image (first in the sorted list)
             os.remove(os.path.join(camera_path, existing_images[0]))
+            existing_images.pop(0)
+
+        # Determine the next image number
+        if existing_images:
+            last_image = existing_images[-1]
+            last_image_number = int(last_image.split('_')[-1].split('.')[0])
+            new_image_number = last_image_number + 1
+        else:
+            new_image_number = 1
 
         # Save image to file
-        image_filename = f"{road_name}_{camera_id}_{len(existing_images) + 1}.jpg"  # Naming new image uniquely
+        image_filename = f"{road_name}_{camera_id}_{new_image_number}.jpg"  # Naming new image uniquely
         image_path = os.path.join(camera_path, image_filename)
 
         image_data.save(image_path)
